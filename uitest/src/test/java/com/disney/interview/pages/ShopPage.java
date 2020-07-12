@@ -12,7 +12,13 @@ public class ShopPage extends BasePage{
     private By profileMenuButton = By.cssSelector(".user-message");
     private By myAccountItem = By.cssSelector("div.popover.popover-bottom a[data-key-code='77']");
 
-    public void clickLogin() {
+    public LoginPage clickLogin() throws InterruptedException {
         getElement(loginButton).click();
+
+        return new LoginPage(driver);
+    }
+
+    public String readWelcomeMessage() {
+        return getElement(profileMenuButton).getText().trim();
     }
 }

@@ -2,16 +2,31 @@ package com.disney.interview.pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.interactions.Actions;
 
-public class HomePage extends BasePage{
+public class HomePage extends BasePage {
+    private static final String URL = "https://www.disney.com/";
+
     public HomePage(WebDriver driver) {
         super(driver);
     }
 
-    private By newAddressClick = By.cssSelector(".button-md.button-primary.button-tall");
+    private By shopLink = By.cssSelector("#goc-desktop-global li.goc-desktop.bar-dropdown a[aria-controls=Shop-dropdown]");
+    private By overlay = By.cssSelector("section.overlayClose");
 
-    public void clickAddAddress() {
-        getElement(newAddressClick).click();
+    public void navigateTo() {
+        driver.navigate().to(URL);
+    }
+
+    public ShopPage clickShop() throws InterruptedException {
+        //wait overlay. overlay in iFrame, so i will just wait
+        Thread.sleep(500);
+        //close overlay by random click
+        Actions builder = new Actions(driver);
+        builder.moveByOffset(10, 25).click().build().perform();
+
+        getElement(shopLink).click();
+
+        return new ShopPage(driver);
     }
 }
-
