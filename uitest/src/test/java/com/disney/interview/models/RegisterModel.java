@@ -7,3 +7,4 @@ public class RegisterModel {
     public String password;
     public String birthday;
 }
+

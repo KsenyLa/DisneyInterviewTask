@@ -1,11 +1,9 @@
 package com.disney.interview;
 
+import com.disney.interview.models.AccountInfoModel;
 import com.disney.interview.models.LoginModel;
 import com.disney.interview.models.RegisterModel;
-import com.disney.interview.pages.HomePage;
-import com.disney.interview.pages.LoginPage;
-import com.disney.interview.pages.RegisterPage;
-import com.disney.interview.pages.ShopPage;
+import com.disney.interview.pages.*;
 import com.disney.interview.util.DataProviderFactory;
 import com.disney.interview.util.DataProviderType;
 import com.disney.interview.util.ModelFactory;
@@ -59,16 +57,23 @@ public class Tests {
 
 
     @Test(dependsOnMethods = { "registerUser" })
+    //@Test
     public void loginAndCheckInfo() throws IOException, InterruptedException {
         System.out.println("loginAndCheckInfo");
         RegisterModel registerModel = provider.getRegisterModel();
+        String expectedFullName = String.format("%s %s", registerModel.firstName, registerModel.lastName);
 
         HomePage homePage = new HomePage(driver);
         homePage.navigateTo();
         ShopPage shopPage = homePage.clickShop();
         LoginPage loginPage = shopPage.clickLogin();
-        loginPage.signIn(registerModel);
+        shopPage = loginPage.signIn(registerModel);
+        AccountPage accountPage = shopPage.clickMyAccount();
+        AccountInfoModel accountInfoModel = accountPage.readUserInfo();
 
+        Assert.assertEquals(accountInfoModel.email, registerModel.email, "Email is matched");
+        Assert.assertEquals(accountInfoModel.name, expectedFullName, "Name is matched");
+        System.out.println("Profile values matches expected!");
     }
 
     @AfterClass

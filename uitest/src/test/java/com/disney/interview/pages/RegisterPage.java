@@ -5,10 +5,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 public class RegisterPage extends BasePage{
-    public RegisterPage(WebDriver driver) {
-        super(driver);
-    }
-
     private By firstName = By.name("firstName");
     private By lastName = By.name("lastName");
     private By email = By.name("email");
@@ -16,10 +12,12 @@ public class RegisterPage extends BasePage{
     private By verifyPassword = By.name("verifyPassword");
     private By dateOfBirth = By.name("dateOfBirth");
     private By createAccountButton = By.cssSelector("section.section-submit button");
-
-    private By logOutButton = By.cssSelector("div.popover.popover-bottom a[data-key-code='83']");
-
     private By continueButton = By.cssSelector("button.btn.btn-primary");
+    private By loader = By.cssSelector("svg.symbol-spinner");
+
+    public RegisterPage(WebDriver driver) {
+        super(driver);
+    }
 
     public ShopPage register(RegisterModel model) throws InterruptedException {
         getElement(firstName).sendKeys(model.firstName);
@@ -33,15 +31,12 @@ public class RegisterPage extends BasePage{
         System.out.println("Going to click continue");
         Thread.sleep(500);
         clickContinue();
-        System.out.println("Waiting page...");
-        //here will be very long wait
-        Thread.sleep(500);
+        Thread.sleep(300);
         System.out.println("Go to parent frame");
-
         driver.switchTo().parentFrame();
-        getElement(logOutButton, 30);
-        System.out.println("Looks like we found Sign Out");
-        Thread.sleep(500);
+        Thread.sleep(300);
+        waitLoader(loader);
+
         return new ShopPage(driver);
     }
 
@@ -51,5 +46,4 @@ public class RegisterPage extends BasePage{
     public void clickContinue() {
         retryingFindClick(continueButton);
     }
-
 }

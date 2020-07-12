@@ -18,14 +18,13 @@ public abstract class BasePage {
         this.driver = driver;
     }
 
-    public WebElement getElement(By element) {
-        return getVisibleElement(element, 10);
+    protected WebElement getElement(By element) {
+        return getElement(element, 20);
     }
 
-    public WebElement getVisibleElement(By element, int secondsToWait) {
+    protected WebElement getElementVisible(By element, int secondsToWait) {
         ExpectedCondition<Boolean> condition = ExpectedConditions.and(
                 ExpectedConditions.presenceOfElementLocated(element),
-                ExpectedConditions.elementToBeClickable(element),
                 ExpectedConditions.visibilityOfElementLocated(element));
 
         return getElementByConditions(element, secondsToWait, condition);
@@ -39,14 +38,33 @@ public abstract class BasePage {
         return getElementByConditions(element, secondsToWait, condition);
     }
 
-    public WebElement getElementByConditions(By element, int secondsToWait, ExpectedCondition<Boolean> conditions) {
+    protected WebElement getElementByConditions(By element, int secondsToWait, ExpectedCondition<Boolean> conditions) {
         WebDriverWait wait = new WebDriverWait(driver, secondsToWait);
         wait.until(conditions);
 
         return driver.findElement(element);
     }
 
-    public boolean retryingFindClick(By by) {
+    protected void waitUntilDisappear(By element, int secondsToWait) {
+        new WebDriverWait(driver, secondsToWait)
+                .until(ExpectedConditions.invisibilityOfElementLocated(element));
+    }
+
+    protected void waitLoader(By loader) {
+        System.out.println("Looking for loader");
+        getElement(loader);
+        System.out.println("Loader located, will wait until loader complete");
+        waitUntilDisappear(loader, 30);
+        System.out.println("Loader disappeared");
+    }
+
+    /**
+     * Workaround to fight Stale Element problem
+     *
+     * @param by
+     * @return
+     */
+    protected boolean retryingFindClick(By by) {
         boolean result = false;
         int attempts = 0;
         while (attempts < 2) {
