@@ -42,7 +42,7 @@ It contains two test methods:
 ## XmlCompare
 
 ### Developer Notes
-The biggest problem is that provided XML was not valid. Both XML contains the tag `manifest:Experience` that was not closed, so I decided to fix that XML files first. Fixed XML resides in <code>xmlcompare\file\</code> folder.
+The biggest problem is that provided XML was not valid. Both XML contains the tag `manifest:Experience` that was not closed, so I decided to fix that XML files first. Fixed XML resides in <code>xmlcompare\file\\</code> folder.
 
 There are 3rd party libraries for comparing XML files in Java like <code>XMLUnit</code> (https://www.xmlunit.org/).
 But I decided that probably you wanted me to implement a custom algorithm so I did it.
