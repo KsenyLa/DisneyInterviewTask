@@ -1,10 +1,9 @@
 package com.disney.interview;
 
 public class Difference {
-    //public int line;
-    public String field;
-    public String left;
-    public String right;
+    private String field;
+    private String left;
+    private String right;
 
     public Difference(String field, String left, String right) {
         this.field = field;
