@@ -1,6 +1,7 @@
 # Disney Interview Task Of Ksenia Laveeva
 
 Author: Ksenia Laveeva
+
 Purpose: Implementation of test task from Disney
 
 ## Structure of repository
