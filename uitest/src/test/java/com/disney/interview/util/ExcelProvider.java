@@ -1,6 +1,5 @@
 package com.disney.interview.util;
 
-import com.disney.interview.models.LoginModel;
 import com.disney.interview.models.RegisterModel;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -23,16 +22,10 @@ public class ExcelProvider implements DataProvider {
         filePath = path.substring(0, path.length() - 1) + FILE_NAME;
     }
 
-    @Override
-    public LoginModel getLoginModel() {
-        return null;
-    }
-
-    @Override
-    public void setLoginModel(LoginModel model) {
-
-    }
-
+    /**
+     * Retrieves RegisterModel from storage
+     * @return Loaded RegisterModel
+     */
     @Override
     public RegisterModel getRegisterModel() throws IOException {
         RegisterModel result = new RegisterModel();
@@ -48,6 +41,10 @@ public class ExcelProvider implements DataProvider {
         return result;
     }
 
+    /**
+     * Saves RegisterModel from storage
+     * @param model RegisterModel for saving
+     */
     @Override
     public void setRegisterModel(RegisterModel model) throws IOException {
         Workbook workbook = new XSSFWorkbook();
@@ -65,8 +62,7 @@ public class ExcelProvider implements DataProvider {
     }
 
     private String readRow(Sheet sheet, int rowNumber){
-        String value = sheet.getRow(rowNumber).getCell(1).getStringCellValue();
-        return value;
+        return sheet.getRow(rowNumber).getCell(1).getStringCellValue();
     }
 
     private void recordRow(Sheet sheet, String field, String value, int rowNumber){

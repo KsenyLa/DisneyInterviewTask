@@ -25,13 +25,13 @@ public class ShopPage extends BasePage{
     }
 
     public AccountPage clickMyAccount() throws InterruptedException {
-        System.out.println("Going to click Profile button");
+        System.out.println("Move to Menu button with User Name");
         WebElement profileMenu = getElementVisible(profileMenuButton, 30);
 
         Actions actions = new Actions(driver);
         actions.moveToElement(profileMenu).perform();
 
-        System.out.println("Waiting to click My Account");
+        System.out.println("Waiting for My Account to be visible");
         getElementVisible(myAccountItem, 10).click();
 
         return new AccountPage(driver);

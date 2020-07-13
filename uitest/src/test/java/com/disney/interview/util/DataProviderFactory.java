@@ -1,7 +1,5 @@
 package com.disney.interview.util;
 
-import com.disney.interview.models.RegisterModel;
-
 public class DataProviderFactory {
 
     /**

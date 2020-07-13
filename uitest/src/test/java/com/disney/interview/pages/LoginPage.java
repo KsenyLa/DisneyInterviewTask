@@ -23,24 +23,25 @@ public class LoginPage extends BasePage{
     public ShopPage signIn(RegisterModel model) throws InterruptedException {
         getElement(email).sendKeys(model.email);
         getElement(password).sendKeys(model.password);
-        System.out.println("Click sign in");
+        System.out.println("Click Sign in");
 
         return clickSignIn();
     }
 
     public ShopPage clickSignIn() throws InterruptedException {
+        System.out.println("Select Sign in iframe");
         getElement(signInButton).click();
 
-        System.out.println("Go to parent frame");
+        System.out.println("Go back to parent frame");
         driver.switchTo().parentFrame();
-
+        System.out.println("Wait for loading overlay");
         waitLoader(loader);
 
         return new ShopPage(driver);
     }
 
     public RegisterPage clickCreateAccount() throws InterruptedException {
-
+        System.out.println("Locate and click create account");
         WebElement element = driver.findElement(createAccount);
         element.click();
 

@@ -14,13 +14,14 @@ public class HomePage extends BasePage {
     }
 
     public void navigateTo() {
+        System.out.println("Navigate to https://www.disney.com");
         driver.navigate().to(URL);
     }
 
     public ShopPage clickShop() throws InterruptedException {
-        //wait overlay. overlay in iFrame, so i will just wait
+        //Wait for overlay with advertisement. Overlay is in iFrame
         Thread.sleep(500);
-        //close overlay by random click
+        //Close overlay by clicking in random location
         Actions builder = new Actions(driver);
         builder.moveByOffset(10, 25).click().build().perform();
 

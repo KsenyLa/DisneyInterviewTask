@@ -10,11 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public abstract class BasePage {
     protected WebDriver driver;
 
-    public BasePage(WebDriver driver) {
-        this.driver = driver;
-    }
-
-    public void setWebDriver(WebDriver driver) {
+    protected BasePage(WebDriver driver) {
         this.driver = driver;
     }
 
@@ -22,54 +18,65 @@ public abstract class BasePage {
         return getElement(element, 20);
     }
 
+    /**
+     * Expected conditions for element to be present and visible
+     * @return Found element
+     */
     protected WebElement getElementVisible(By element, int secondsToWait) {
-        ExpectedCondition<Boolean> condition = ExpectedConditions.and(
-                ExpectedConditions.presenceOfElementLocated(element),
-                ExpectedConditions.visibilityOfElementLocated(element));
-
-        return getElementByConditions(element, secondsToWait, condition);
+        return getElementByCondition(element, secondsToWait, ExpectedConditions.visibilityOfElementLocated(element));
     }
 
+    /**
+     * Expected conditions for element to be present and clickable
+     * @return Found element
+     */
     public WebElement getElement(By element, int secondsToWait) {
-        ExpectedCondition<Boolean> condition = ExpectedConditions.and(
-                ExpectedConditions.presenceOfElementLocated(element),
-                ExpectedConditions.elementToBeClickable(element));
-
-        return getElementByConditions(element, secondsToWait, condition);
+        return getElementByCondition(element, secondsToWait, ExpectedConditions.elementToBeClickable(element));
     }
 
-    protected WebElement getElementByConditions(By element, int secondsToWait, ExpectedCondition<Boolean> conditions) {
-        WebDriverWait wait = new WebDriverWait(driver, secondsToWait);
-        wait.until(conditions);
+    /**
+     * Wait for element by selected expected condition
+     * @param element Element
+     * @param secondsToWait Waiting time maximum
+     * @param condition Expected condition
+     * @return
+     */
+    protected WebElement getElementByCondition(By element, int secondsToWait, ExpectedCondition<WebElement> condition) {
+        new WebDriverWait(driver, secondsToWait)
+                .until(condition);
 
         return driver.findElement(element);
     }
 
+    /**
+     * Wait for element by selected expected condition - invisibilityOfElementLocated
+     */
     protected void waitUntilDisappear(By element, int secondsToWait) {
         new WebDriverWait(driver, secondsToWait)
                 .until(ExpectedConditions.invisibilityOfElementLocated(element));
     }
 
+    /**
+     * Wait for loading overlay
+     * @param loader Selector of overlay
+     */
     protected void waitLoader(By loader) {
-        System.out.println("Looking for loader");
+        System.out.println("Check if loading overlay is presented");
         getElement(loader);
-        System.out.println("Loader located, will wait until loader complete");
+        System.out.println("Loading overlay was located, wait until loading completes");
         waitUntilDisappear(loader, 30);
-        System.out.println("Loader disappeared");
+        System.out.println("Page loading finished");
     }
 
     /**
-     * Workaround to fight Stale Element problem
-     *
-     * @param by
-     * @return
+     * Workaround to solve stale Element problem if the Element no longer appears on the DOM of the page
+     * @return If element was successfully clicked
      */
     protected boolean retryingFindClick(By by) {
         boolean result = false;
         int attempts = 0;
         while (attempts < 2) {
             try {
-                //driver.findElement(by).click();
                 getElement(by).click();
                 result = true;
                 break;

@@ -5,6 +5,10 @@ import com.disney.interview.models.RegisterModel;
 import java.util.Random;
 
 public class ModelFactory {
+    /**
+     * Generator of user data and random email address
+     * @return Generated RegisterModel
+     */
     public static RegisterModel createRegisterModel() {
         Random rand = new Random();
         int randomNumber = rand.nextInt(100000);

@@ -1,14 +1,19 @@
 package com.disney.interview.util;
 
-import com.disney.interview.models.LoginModel;
 import com.disney.interview.models.RegisterModel;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public interface DataProvider {
-    LoginModel getLoginModel();
-    void setLoginModel(LoginModel model);
+    /**
+     * Retrieves RegisterModel from storage
+     * @return Loaded RegisterModel
+     */
     RegisterModel getRegisterModel() throws IOException;
+
+    /**
+     * Saves RegisterModel from storage
+     * @param model RegisterModel for saving
+     */
     void setRegisterModel(RegisterModel model) throws IOException;
 }

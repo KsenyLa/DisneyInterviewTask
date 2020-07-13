@@ -1,21 +1,21 @@
 package com.disney.interview;
 
 import com.disney.interview.models.AccountInfoModel;
-import com.disney.interview.models.LoginModel;
 import com.disney.interview.models.RegisterModel;
 import com.disney.interview.pages.*;
+import com.disney.interview.util.DataProvider;
 import com.disney.interview.util.DataProviderFactory;
 import com.disney.interview.util.DataProviderType;
 import com.disney.interview.util.ModelFactory;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
-import org.testng.annotations.*;
-import com.disney.interview.util.DataProvider;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
-import javax.xml.crypto.Data;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 public class Tests {
     private DataProvider provider;
@@ -35,9 +35,18 @@ public class Tests {
         Thread.sleep(1000);
     }
 
+    /**
+     * Given I'm on the Home page (www.disney.com)
+     *     And I navigate to the Shop page
+     *     When I click on "Sign In| Sign Up"
+     *     And I select "Create an Account"
+     *     And I enter First Name, Last Name, Email address, Password, Verify Password, Birth Date and click on "Create Account"
+     *     Then account should be created successfully
+     *     And expected First Name should be displayed as a name of Menu element
+     */
     @Test
-    public void registerUser() throws IOException, InterruptedException {
-        System.out.println("registerUser");
+    public void whenUserRegistered_thenUsernameShouldBeDisplayed() throws IOException, InterruptedException {
+        System.out.println("Test started: whenUserRegistered_thenUsernameShouldBeDisplayed");
         RegisterModel registerModel = ModelFactory.createRegisterModel();
         HomePage homePage = new HomePage(driver);
         homePage.navigateTo();
@@ -49,17 +58,23 @@ public class Tests {
         System.out.println("Welcome message: " + welcome);
         String firstName = welcome.substring(0, welcome.length()-1).replace("Hi ","");
 
-        //checking that first name of user match expected
+        //Checking that displayed First Name on Menu element matches expected name of user
         Assert.assertEquals(firstName, registerModel.firstName);
-
+        System.out.println("Username matches expected!");
         provider.setRegisterModel(registerModel);
     }
 
-
-    @Test(dependsOnMethods = { "registerUser" })
+    /**
+     * Given I'm on the Home page (www.disney.com)
+     *     And I navigate to the Shop page
+     *     When I log in as previously registered user with valid login and password
+     *     And I go to "My Account"
+     *     Then expected First Name, Last Name and Email address should be displayed under "Account Details"
+     */
+    @Test(dependsOnMethods = { "whenUserRegistered_thenUsernameShouldBeDisplayed" })
     //@Test
-    public void loginAndCheckInfo() throws IOException, InterruptedException {
-        System.out.println("loginAndCheckInfo");
+    public void whenPreviouslyRegisteredUserLogsIn_thenAccountDisplaysRegisteredInfo() throws IOException, InterruptedException {
+        System.out.println("Test started: whenUserRegistered_thenUsernameShouldBeDisplayed");
         RegisterModel registerModel = provider.getRegisterModel();
         String expectedFullName = String.format("%s %s", registerModel.firstName, registerModel.lastName);
 
@@ -71,17 +86,13 @@ public class Tests {
         AccountPage accountPage = shopPage.clickMyAccount();
         AccountInfoModel accountInfoModel = accountPage.readUserInfo();
 
-        Assert.assertEquals(accountInfoModel.email, registerModel.email, "Email is matched");
-        Assert.assertEquals(accountInfoModel.name, expectedFullName, "Name is matched");
-        System.out.println("Profile values matches expected!");
-    }
-
-    @AfterClass
-    public void tearDown() throws InterruptedException {
+        Assert.assertEquals(accountInfoModel.email, registerModel.email, "Email matches expected");
+        Assert.assertEquals(accountInfoModel.name, expectedFullName, "Full Name matches expected");
+        System.out.println("Profile information matches expected");
     }
 
     @AfterMethod
-    public void afterMethod() throws InterruptedException {
+    public void afterMethod() {
         driver.quit();
     }
 }

@@ -26,15 +26,12 @@ public class RegisterPage extends BasePage{
         getElement(newPassword).sendKeys(model.password);
         getElement(verifyPassword).sendKeys(model.password);
         getElement(dateOfBirth).sendKeys(model.birthday);
-        System.out.println("Register form filled");
+        System.out.println("Fill Registration Form");
         clickRegister();
-        System.out.println("Going to click continue");
-        Thread.sleep(500);
+        System.out.println("Click Continue");
         clickContinue();
-        Thread.sleep(300);
-        System.out.println("Go to parent frame");
+        System.out.println("Go back to parent frame");
         driver.switchTo().parentFrame();
-        Thread.sleep(300);
         waitLoader(loader);
 
         return new ShopPage(driver);
@@ -43,6 +40,7 @@ public class RegisterPage extends BasePage{
     public void clickRegister() {
         getElement(createAccountButton).click();
     }
+
     public void clickContinue() {
         retryingFindClick(continueButton);
     }
